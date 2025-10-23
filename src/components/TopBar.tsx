@@ -50,7 +50,7 @@ export function TopBar({
   return (
     <div className="h-16 border-b border-border bg-card flex items-center justify-between px-6">
       <div className="flex items-center gap-6">
-        <h1 className="text-foreground">ISP Manager</h1>
+        {/* <h1 className="text-foreground">ISP Manager</h1> */}
         
         <Select value={currentTenant} onValueChange={onTenantChange}>
           <SelectTrigger className="w-[200px] bg-input-background border-0">
@@ -76,9 +76,9 @@ export function TopBar({
           </SelectContent>
         </Select>
 
-        <Badge variant="secondary" className="bg-muted">
+        {/* <Badge variant="secondary" className="bg-muted">
           Production
-        </Badge>
+        </Badge> */}
       </div>
 
       <div className="flex items-center gap-3">
@@ -117,9 +117,9 @@ export function TopBar({
           <span className="absolute top-1 right-1 h-2 w-2 bg-destructive rounded-full" />
         </Button>
 
-        <Button variant="ghost" size="icon">
+        {/* <Button variant="ghost" size="icon">
           <HelpCircle className="h-5 w-5" />
-        </Button>
+        </Button> */}
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

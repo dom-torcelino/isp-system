@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from "react";
 import { TopBar } from "@/components/TopBar";
@@ -42,10 +42,8 @@ export default function AppRoot() {
   const [viewingTenantId, setViewingTenantId] = useState<string | null>(null);
   // Apply theme to document
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-
-    if (savedTheme === "dark" || savedTheme === "light") {
-      setTheme(savedTheme);
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
@@ -163,26 +161,27 @@ export default function AppRoot() {
   }
   return (
     <LocaleProvider>
-      <div className="h-screen w-screen flex flex-col bg-background">
-        <TopBar
-          currentTenant={currentTenant}
-          currentRole={currentRole}
-          dateRange={dateRange}
-          theme={theme}
-          userName={userName}
-          onTenantChange={setCurrentTenant}
-          onDateRangeChange={(range) => setDateRange(range as DateRange)}
-          onRoleChange={handleRoleChange}
-          onThemeToggle={handleThemeToggle}
-          onLogout={handleLogoutClick}
+      <div className="h-screen w-screen flex flex-row bg-background overflow-hidden">
+        <LeftNav
+          currentView={currentView}
+          userRole={currentRole}
+          onNavigate={handleNavigate}
+          collapsed={navCollapsed}
+          onCollapsedChange={setNavCollapsed}
         />
-        <div className="flex-1 flex overflow-hidden">
-          <LeftNav
-            currentView={currentView}
-            userRole={currentRole}
-            onNavigate={handleNavigate}
-            collapsed={navCollapsed}
-            onCollapsedChange={setNavCollapsed}
+
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <TopBar
+            currentTenant={currentTenant}
+            currentRole={currentRole}
+            dateRange={dateRange}
+            theme={theme}
+            userName={userName}
+            onTenantChange={setCurrentTenant}
+            onDateRangeChange={(range) => setDateRange(range as DateRange)}
+            onRoleChange={handleRoleChange}
+            onThemeToggle={handleThemeToggle}
+            onLogout={handleLogoutClick}
           />
           <main className="flex-1 overflow-y-auto p-6">{renderContent()}</main>
         </div>
