@@ -1,3 +1,5 @@
+'use client'; // Ensure this component is treated as a Client Component
+
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Locale, TranslationKeys, getTranslation } from '../lib/i18n';
 
@@ -9,24 +11,39 @@ interface LocaleContextType {
 
 const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
 
-export function LocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(() => {
-    // Load from localStorage or default to English
-    const saved = localStorage.getItem('locale');
-    return (saved as Locale) || 'en';
-  });
+// Default locale for server rendering and initial client load
+const defaultLocale: Locale = 'en';
 
-  const [t, setT] = useState<TranslationKeys>(() => getTranslation(locale));
+export function LocaleProvider({ children }: { children: ReactNode }) {
+  // 1. Initialize with a default value first
+  const [locale, setLocaleState] = useState<Locale>(defaultLocale);
+
+  // Initialize 't' based on the default locale initially
+  const [t, setT] = useState<TranslationKeys>(() => getTranslation(defaultLocale));
+
+  // 2. Use useEffect to read localStorage ONLY on the client
+  useEffect(() => {
+    const saved = localStorage.getItem('locale');
+    const initialLocale = (saved as Locale) || defaultLocale;
+    if (initialLocale !== locale) { // Only update if different from default/current
+        setLocaleState(initialLocale);
+        setT(getTranslation(initialLocale)); // Update translations if locale changed
+    }
+  }, []); // Empty dependency array ensures it runs only once on mount
+
 
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);
-    localStorage.setItem('locale', newLocale);
+    localStorage.setItem('locale', newLocale); // This is fine (event handler context)
     setT(getTranslation(newLocale));
   };
 
-  useEffect(() => {
-    setT(getTranslation(locale));
-  }, [locale]);
+  // This useEffect might be redundant now if setLocale always updates 't',
+  // but it ensures 't' syncs if 'locale' were somehow changed externally.
+  // Keep it unless you're sure setLocale is the ONLY way 'locale' state changes.
+  // useEffect(() => {
+  //   setT(getTranslation(locale));
+  // }, [locale]);
 
   return (
     <LocaleContext.Provider value={{ locale, setLocale, t }}>
