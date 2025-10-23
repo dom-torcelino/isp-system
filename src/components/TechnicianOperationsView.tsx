@@ -43,7 +43,7 @@ const scheduleData = [
 ];
 
 export function TechnicianOperationsView({ userRole }: TechnicianOperationsViewProps) {
-  const isReadOnly = userRole === 'Support';
+  const isReadOnly = userRole === 'CustomerSupport';
   
   return (
     <div className="space-y-6">
