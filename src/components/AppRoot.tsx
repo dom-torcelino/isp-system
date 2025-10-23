@@ -1,50 +1,53 @@
-'use client';
-import { useState, useEffect } from 'react';
-import { TopBar } from '@/components/TopBar';
-import { LeftNav } from '@/components/LeftNav';
-import { OverviewDashboard } from '@/components/OverviewDashboard';
-import { TicketingViewV2 } from '@/components/TicketingViewV2';
-import { BillingView } from '@/components/BillingView';
-import { RevenueView } from '@/components/RevenueView';
-import { CRMView } from '@/components/CRMView';
-import { ComplianceView } from '@/components/ComplianceView';
-import { TechnicianOperationsView } from '@/components/TechnicianOperationsView';
-import { IntegrationsView } from '@/components/IntegrationsView';
-import { ReportsView } from '@/components/ReportsView';
-import { TenantManagementView } from '@/components/TenantManagementView';
-import { TenantDetailsView } from '@/components/TenantDetailsView';
-import { AuthSecurityView } from '@/components/AuthSecurityView';
-import { SettingsView } from '@/components/SettingsView';
-import { RBACOverlay } from '@/components/RBACOverlay';
-import { LoginScreen } from '@/components/LoginScreen';
-import { LogoutConfirmDialog } from '@/components/LogoutConfirmDialog';
-import { UserRole, DateRange } from '../types';
-import { hasAccess, getAccessDeniedReason, ModuleName } from '../lib/rbac';
-import { Toaster } from '@/components/ui/sonner';
-import { toast } from 'sonner';
-import { Card } from '@/components/ui/card';
-import { LocaleProvider } from '../contexts/LocaleContext';
+"use client";
+
+import { useState, useEffect } from "react";
+import { TopBar } from "@/components/TopBar";
+import { LeftNav } from "@/components/LeftNav";
+import { OverviewDashboard } from "@/components/OverviewDashboard";
+import { TicketingViewV2 } from "@/components/TicketingViewV2";
+import { BillingView } from "@/components/BillingView";
+import { RevenueView } from "@/components/RevenueView";
+import { CRMView } from "@/components/CRMView";
+import { ComplianceView } from "@/components/ComplianceView";
+import { TechnicianOperationsView } from "@/components/TechnicianOperationsView";
+import { IntegrationsView } from "@/components/IntegrationsView";
+import { ReportsView } from "@/components/ReportsView";
+import { TenantManagementView } from "@/components/TenantManagementView";
+import { TenantDetailsView } from "@/components/TenantDetailsView";
+import { AuthSecurityView } from "@/components/AuthSecurityView";
+import { SettingsView } from "@/components/SettingsView";
+import { RBACOverlay } from "@/components/RBACOverlay";
+import { LoginScreen } from "@/components/LoginScreen";
+import { LogoutConfirmDialog } from "@/components/LogoutConfirmDialog";
+import { UserRole, DateRange } from "../types";
+import { hasAccess, getAccessDeniedReason, ModuleName } from "../lib/rbac";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
+import { Card } from "@/components/ui/card";
+import { LocaleProvider } from "../contexts/LocaleContext";
 type ViewType = ModuleName;
 export default function AppRoot() {
   // Authentication state
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userName, setUserName] = useState('Jane D.');
+  const [userName, setUserName] = useState("Jane D.");
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
-  
+
   // App state
-  const [currentView, setCurrentView] = useState<ViewType>('overview');
-  const [currentTenant, setCurrentTenant] = useState('FiberFast ISP');
-  const [currentRole, setCurrentRole] = useState<UserRole>('SystemAdmin');
-  const [dateRange, setDateRange] = useState<DateRange>('30d');
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [currentView, setCurrentView] = useState<ViewType>("overview");
+  const [currentTenant, setCurrentTenant] = useState("FiberFast ISP");
+  const [currentRole, setCurrentRole] = useState<UserRole>("SystemAdmin");
+  const [dateRange, setDateRange] = useState<DateRange>("30d");
+  const [theme, setTheme] = useState<"light" | "dark">("light");
   const [navCollapsed, setNavCollapsed] = useState(false);
   const [viewingTenantId, setViewingTenantId] = useState<string | null>(null);
   // Apply theme to document
   useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme === "dark" || savedTheme === "light") {
+      setTheme(savedTheme);
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove("dark");
     }
   }, [theme]);
   const handleNavigate = (view: string) => {
@@ -53,19 +56,19 @@ export default function AppRoot() {
   const handleRoleChange = (role: string) => {
     setCurrentRole(role as UserRole);
     // Reset to overview when role changes
-    setCurrentView('overview');
+    setCurrentView("overview");
   };
   const handleThemeToggle = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
+    setTheme(theme === "light" ? "dark" : "light");
   };
   const handleLogin = (username: string, password: string) => {
     // Demo login - just check credentials
-    if (username === 'admin' && password === 'Admin123') {
+    if (username === "admin" && password === "Admin123") {
       setIsAuthenticated(true);
-      setUserName('Jane D.');
-      setCurrentRole('SuperAdmin');
-      setCurrentView('overview');
-      toast.success('Welcome back!');
+      setUserName("Jane D.");
+      setCurrentRole("SuperAdmin");
+      setCurrentView("overview");
+      toast.success("Welcome back!");
     }
   };
   const handleLogoutClick = () => {
@@ -74,15 +77,15 @@ export default function AppRoot() {
   const handleLogoutConfirm = () => {
     // Reset state to defaults
     setIsAuthenticated(false);
-    setUserName('Jane D.');
-    setCurrentRole('SuperAdmin');
-    setCurrentTenant('FiberFast ISP');
-    setDateRange('30d');
-    setCurrentView('overview');
+    setUserName("Jane D.");
+    setCurrentRole("SuperAdmin");
+    setCurrentTenant("FiberFast ISP");
+    setDateRange("30d");
+    setCurrentView("overview");
     setNavCollapsed(false);
-    setTheme('light');
+    setTheme("light");
     setShowLogoutDialog(false);
-    toast.info('Signed out');
+    toast.info("Signed out");
   };
   const renderContent = () => {
     // Check RBAC before rendering content
@@ -96,17 +99,22 @@ export default function AppRoot() {
       );
     }
     switch (currentView) {
-      case 'overview':
-        return <OverviewDashboard userRole={currentRole} onNavigate={handleNavigate} />;
-      case 'tickets':
+      case "overview":
+        return (
+          <OverviewDashboard
+            userRole={currentRole}
+            onNavigate={handleNavigate}
+          />
+        );
+      case "tickets":
         return <TicketingViewV2 userRole={currentRole} />;
-      case 'billing':
+      case "billing":
         return <BillingView userRole={currentRole} />;
-      case 'revenue':
+      case "revenue":
         return <RevenueView userRole={currentRole} />;
-      case 'auth':
+      case "auth":
         return <AuthSecurityView userRole={currentRole} />;
-      case 'tenants':
+      case "tenants":
         if (viewingTenantId) {
           return (
             <TenantDetailsView
@@ -121,22 +129,27 @@ export default function AppRoot() {
             onViewTenantDetails={(tenantId) => setViewingTenantId(tenantId)}
           />
         );
-      case 'technicians':
+      case "technicians":
         return <TechnicianOperationsView userRole={currentRole} />;
-      case 'crm':
+      case "crm":
         return <CRMView userRole={currentRole} />;
-      case 'reports':
+      case "reports":
         return <ReportsView userRole={currentRole} />;
-      case 'compliance':
+      case "compliance":
         return <ComplianceView userRole={currentRole} />;
-      case 'integrations':
+      case "integrations":
         return <IntegrationsView userRole={currentRole} />;
-      case 'portal':
+      case "portal":
         return <CustomerPortalView userRole={currentRole} />;
-      case 'settings':
+      case "settings":
         return <SettingsView userRole={currentRole} />;
       default:
-        return <OverviewDashboard userRole={currentRole} onNavigate={handleNavigate} />;
+        return (
+          <OverviewDashboard
+            userRole={currentRole}
+            onNavigate={handleNavigate}
+          />
+        );
     }
   };
   // Show login screen if not authenticated
@@ -171,17 +184,15 @@ export default function AppRoot() {
             collapsed={navCollapsed}
             onCollapsedChange={setNavCollapsed}
           />
-          <main className="flex-1 overflow-y-auto p-6">
-            {renderContent()}
-          </main>
+          <main className="flex-1 overflow-y-auto p-6">{renderContent()}</main>
         </div>
-        
+
         <LogoutConfirmDialog
           open={showLogoutDialog}
           onOpenChange={setShowLogoutDialog}
           onConfirm={handleLogoutConfirm}
         />
-        
+
         <Toaster />
       </div>
     </LocaleProvider>
@@ -192,23 +203,23 @@ interface ViewProps {
   userRole: UserRole;
 }
 function CustomerPortalView({ userRole }: ViewProps) {
-  const isReadOnly = userRole === 'SystemAdmin';
-  
+  const isReadOnly = userRole === "SystemAdmin";
+
   return (
     <div className="space-y-6">
       <div>
         <h2>Customer Portal</h2>
         <p className="text-muted-foreground">
           Configure self-service portal and announcements
-          {isReadOnly && ' (Read-only access)'}
+          {isReadOnly && " (Read-only access)"}
         </p>
       </div>
-      
+
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: 'Portal Visits (30d)', value: '12,456' },
-          { label: 'Self-Service Tickets', value: '892' },
-          { label: 'Payment Success Rate', value: '94.3%' },
+          { label: "Portal Visits (30d)", value: "12,456" },
+          { label: "Self-Service Tickets", value: "892" },
+          { label: "Payment Success Rate", value: "94.3%" },
         ].map((kpi, idx) => (
           <Card key={idx} className="p-4">
             <p className="text-muted-foreground">{kpi.label}</p>
