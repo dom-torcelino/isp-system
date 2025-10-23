@@ -53,7 +53,7 @@ const RBAC_MATRIX: Record<UserRole, ModuleAccess> = {
     portal: 'readonly',
     settings: 'full', // tenant scope
   },
-  Support: {
+  CustomerSupport: {
     overview: 'full',
     auth: 'none',
     tenants: 'none',
@@ -108,7 +108,7 @@ export function getAccessDeniedReason(role: UserRole, module: ModuleName): strin
       case 'tenants':
         return 'Restricted to Super Admin only';
       case 'auth':
-        return role === 'Support' || role === 'Technician'
+        return role === 'CustomerSupport' || role === 'Technician'
           ? 'Restricted to Admin roles'
           : 'Access denied';
       case 'reports':
