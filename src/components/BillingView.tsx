@@ -45,7 +45,7 @@ const invoiceStatusData = [
 ];
 
 export function BillingView({ userRole }: BillingViewProps) {
-  const isSupport = userRole === 'Support';
+  const isSupport = userRole === 'CustomerSupport';
   const [generateOpen, setGenerateOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
   const [newInvoices, setNewInvoices] = useState<any[]>([]);
