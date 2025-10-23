@@ -267,8 +267,8 @@ export function OverviewDashboard({ userRole, onNavigate }: OverviewDashboardPro
           <div className="h-[160px] mb-4">
             <DonutChart
               data={billingDistribution}
-              nameKey="name"
-              valueKey="value"
+              // nameKey="name"
+              // valueKey="value"
             />
           </div>
 
@@ -306,7 +306,8 @@ export function OverviewDashboard({ userRole, onNavigate }: OverviewDashboardPro
               bars={[
                 { key: 'count', label: 'Count', color: 'var(--chart-3)' },
               ]}
-              unit="customers"
+              // unit="customers"
+              unit='count'
             />
           </div>
 
@@ -397,7 +398,8 @@ export function OverviewDashboard({ userRole, onNavigate }: OverviewDashboardPro
                   { key: 'MRR', label: 'MRR', color: 'var(--chart-1)' },
                   { key: 'ARPU', label: 'ARPU', color: 'var(--chart-3)' },
                 ]}
-                unit="PHP"
+                // unit="PHP"
+                unit='currency'
               />
             </div>
 

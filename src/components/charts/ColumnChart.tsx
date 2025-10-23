@@ -15,7 +15,7 @@ interface ColumnChartProps {
   colors?: string[];
   stacked?: boolean;
   height?: number;
-  unit?: 'currency' | 'percent' | 'count' | 'minutes';
+  unit?: 'currency' | 'percent' | 'count' | 'minutes' ;
   showLegend?: boolean;
   showGrid?: boolean;
 }
